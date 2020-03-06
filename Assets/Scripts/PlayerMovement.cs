@@ -57,7 +57,8 @@ public class PlayerMovement : MonoBehaviour
     }
     private void Dodge()
     {
-        Debug.Log("Attempting a dodge"); //Need to figure out a way of determining which direction player should be looking and thus dodging. Atm it only dodges to the right.
-        myRigidBody.AddForce(dodgeForce,dodgeForce*0.1f,0,ForceMode.Impulse);
+        Debug.Log("Attempting a dodge"); 
+        
+        myRigidBody.AddForce(Mathf.Abs(dodgeForce)*Mathf.Sign(transform.localScale.x),dodgeForce*0.1f,0,ForceMode.Impulse);
     }
 }
