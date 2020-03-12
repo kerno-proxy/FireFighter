@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class PlayerControls : MonoBehaviour
 {
+    public MyElementSO testingSO;
     void Update()
     {
         if (Input.GetButtonDown("Spirit"))
@@ -15,6 +16,9 @@ public class PlayerControls : MonoBehaviour
 
     private void DevourSpirit()
     {
-        throw new NotImplementedException();
+        for (int i = 0; i<testingSO.elementsList.Length; i++)
+        {
+            Debug.Log(testingSO.elementsList[i].ElementName);
+        }
     }
 }

@@ -2,11 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class Element
 {
-    private Vector3 objectSize;
-    private Color objectColor;
+    public string elementName = "Element Name";
+    [SerializeField] private Vector3 objectSize;
+    [SerializeField] private Color objectColor;
 
+    public string ElementName
+    {
+        get { return elementName; }
+        set { elementName = value; }
+    }
     public Vector3 ObjectSize
     {
         get{ return objectSize; }
