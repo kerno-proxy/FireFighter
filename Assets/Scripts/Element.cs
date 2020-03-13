@@ -8,6 +8,13 @@ public class Element
     public string elementName = "Element Name";
     [SerializeField] private Vector3 objectSize;
     [SerializeField] private Color objectColor;
+    public enum ItemCharacteristic
+    {
+        Consumable,
+        Combat,
+        Resource,
+    };
+    [SerializeField] ItemCharacteristic myTestEnum;
 
     public string ElementName
     {
