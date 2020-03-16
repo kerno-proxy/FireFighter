@@ -8,13 +8,15 @@ public class Element
     public string elementName = "Element Name";
     [SerializeField] private Vector3 objectSize;
     [SerializeField] private Color objectColor;
-    public enum ItemCharacteristic
+    public SpiritType spiritType;
+    public enum SpiritType
     {
-        Consumable,
-        Combat,
-        Resource,
+        Fire,
+        Water,
+        Earth,
+        Air
     };
-    [SerializeField] ItemCharacteristic myTestEnum;
+    
 
     public string ElementName
     {
@@ -30,6 +32,11 @@ public class Element
     {
         get { return objectColor; }
         set { objectColor = value; }
+    }
+    public SpiritType SetSpiritType
+    {
+        get { return spiritType; }
+        set { spiritType = value; }
     }
 }
 

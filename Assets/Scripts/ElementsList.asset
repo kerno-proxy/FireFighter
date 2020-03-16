@@ -14,10 +14,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   elementsList:
   - elementName: Fire
-    objectSize: {x: 0, y: 0, z: 0}
-    objectColor: {r: 0, g: 0, b: 0, a: 0}
-    myTestEnum: 0
+    objectSize: {x: 1, y: 1, z: 0}
+    objectColor: {r: 0.9056604, g: 0.29467824, b: 0.06407974, a: 0}
+    spiritType: 0
+  - elementName: Water
+    objectSize: {x: 2, y: 2, z: 0}
+    objectColor: {r: 0.10693307, g: 0.583566, b: 0.8396226, a: 0}
+    spiritType: 1
   - elementName: Air
-    objectSize: {x: 0, y: 0, z: 0}
-    objectColor: {r: 0, g: 0, b: 0, a: 0}
-    myTestEnum: 0
+    objectSize: {x: 3, y: 3, z: 0}
+    objectColor: {r: 0.068752214, g: 0.9716981, b: 0.8550407, a: 0}
+    spiritType: 3
+  - elementName: Earth
+    objectSize: {x: 4, y: 4, z: 4}
+    objectColor: {r: 0.990566, g: 0.65101916, b: 0.023362402, a: 0}
+    spiritType: 2

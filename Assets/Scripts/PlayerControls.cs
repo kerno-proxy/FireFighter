@@ -5,11 +5,11 @@ using UnityEngine;
 
 public class PlayerControls : MonoBehaviour
 {
-    public MyElementSO testingSO;
-    public Transform nearestSpirit;
-
-    private List<Collider> collisionList;
+    public ElementsSO elementsList;
+    
+    [SerializeField] List<Collider> collisionList;
     private SphereCollider mySphereCollider;
+    
 
     void Start()
     {
@@ -18,44 +18,73 @@ public class PlayerControls : MonoBehaviour
     }
     void Update()
     {
+        FindNearbySpirit();
         if (Input.GetButtonDown("Spirit"))
         {
             DevourSpirit();
         }
-        ActivateNearbySpirit();
+        
     }
 
-    private void ActivateNearbySpirit() //Need to figure out a way to count distance between player and Spirit. There might be some sense in using Vector3.Distance.
+    private void FindNearbySpirit()
     {
-        Vector3 closestSpiritDistance = new Vector3(mySphereCollider.radius, mySphereCollider.radius, transform.position.z); //This one might be useless
-        for (int i = 0; i < collisionList.Count; i++)
+        float minDistance = mySphereCollider.radius;
+        
+        for (int i = 0; i<collisionList.Count; i++)
         {
-            if ()
+            float currentDistance = Vector3.Distance(transform.position, collisionList[i].gameObject.transform.position);
+           
+            if (currentDistance < minDistance)
+            {
+                minDistance = currentDistance;
+                ActivateNearbySpirit(collisionList[i].gameObject);
+            } else if (currentDistance>minDistance)
+            {
+               
+                DeactivateNearbySpirit(collisionList[i].gameObject);
+                collisionList.Remove(collisionList[i]);
+               
+            }
         }
+    }
+
+    private void DeactivateNearbySpirit(GameObject spiritToDeactivate)
+    {
+        
+        spiritToDeactivate.GetComponent<Spirit>().DeactivateSpirit();
+    }
+
+    private void ActivateNearbySpirit(GameObject spiritToActivate)
+    {
+        
+        spiritToActivate.GetComponent<Spirit>().ActivateSpirit();
     }
 
     private void DevourSpirit()
     {
-        for (int i = 0; i<testingSO.elementsList.Length; i++)
+        for (int i = 0; i<collisionList.Count; i++)
         {
-            Debug.Log(testingSO.elementsList[i].ElementName);
+            
+            for (int j=0; j < elementsList.elementsList.Length; j++)
+            {
+                if (collisionList[i].gameObject.GetComponent<Spirit>().GetSpiritType() == elementsList.elementsList[j].spiritType)
+                {
+                    transform.localScale = elementsList.elementsList[j].ObjectSize;
+
+                    
+                }
+            }
         }
     }
-       private void OnTriggerStay(Collider other)
+       
+    private void OnTriggerEnter(Collider other)
     {
         if (!collisionList.Contains(other) && other.gameObject.tag == "Spirit")
         {
 
             collisionList.Add(other);
+            
         }
-        
     }
-    private void OnTriggerExit(Collider other)
-    {
-        if (collisionList.Contains(other) && other.gameObject.tag == "Spirit")
-            {
-            Debug.Log("Forgetting a guy named: " + other.gameObject.name);
-            collisionList.Remove(other);
-            }
-    }
+   
 }
