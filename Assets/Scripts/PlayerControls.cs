@@ -2,19 +2,25 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Element;
 
 public class PlayerControls : MonoBehaviour
 {
     public ElementsSO elementsList;
     
     [SerializeField] List<Collider> collisionList;
+    [SerializeField] SpiritType devouredSpiritType = SpiritType.Empty;
+    [SerializeField] Element originalSpiritCache;
+    [SerializeField] float delayBeforeSpiritRelease;
     private SphereCollider mySphereCollider;
+
     
 
     void Start()
     {
         collisionList = new List<Collider>();
         mySphereCollider = GetComponent<SphereCollider>();
+        CacheOriginalForm();
     }
     void Update()
     {
@@ -22,7 +28,7 @@ public class PlayerControls : MonoBehaviour
         if (Input.GetButtonDown("Spirit"))
         {
             DevourSpirit();
-        }
+        } 
         
     }
 
@@ -62,19 +68,30 @@ public class PlayerControls : MonoBehaviour
 
     private void DevourSpirit()
     {
-        for (int i = 0; i<collisionList.Count; i++)
+        if (collisionList.Count > 0)
         {
-            
-            for (int j=0; j < elementsList.elementsList.Length; j++)
+            for (int i = 0; i < collisionList.Count; i++)
             {
-                if (collisionList[i].gameObject.GetComponent<Spirit>().GetSpiritType() == elementsList.elementsList[j].spiritType)
-                {
-                    transform.localScale = elementsList.elementsList[j].ObjectSize;
 
-                    
+                for (int j = 0; j < elementsList.elementsList.Length; j++)
+                {
+                    if (collisionList[i].gameObject.GetComponent<Spirit>().GetSpiritType() == elementsList.elementsList[j].spiritType)
+                    {
+                        transform.localScale = elementsList.elementsList[j].ObjectSize;
+                        devouredSpiritType = elementsList.elementsList[j].spiritType;
+
+                    }
                 }
             }
+        } else
+        {
+            ReleaseSpirit();
         }
+    }
+    private void ReleaseSpirit()
+    {
+        Debug.Log("Releasing spirit " + devouredSpiritType);
+        transform.localScale = originalSpiritCache.ObjectSize;
     }
        
     private void OnTriggerEnter(Collider other)
@@ -84,6 +101,16 @@ public class PlayerControls : MonoBehaviour
 
             collisionList.Add(other);
             
+        }
+    }
+    private void CacheOriginalForm()
+    {
+        for (int i = 0; i < elementsList.elementsList.Length; i++)
+        {
+            if (elementsList.elementsList[i].spiritType == devouredSpiritType)
+            {
+                originalSpiritCache = elementsList.elementsList[i];
+            }
         }
     }
    

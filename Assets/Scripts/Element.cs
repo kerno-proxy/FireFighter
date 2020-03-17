@@ -14,7 +14,8 @@ public class Element
         Fire,
         Water,
         Earth,
-        Air
+        Air,
+        Empty
     };
     
 
