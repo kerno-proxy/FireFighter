@@ -44,8 +44,9 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetButton("Horizontal"))
         {
             transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x) * Mathf.Sign(Input.GetAxis("Horizontal")), transform.localScale.y, transform.localScale.z);
+            myRigidBody.velocity = new Vector3(Input.GetAxis("Horizontal") * movementSpeed, myRigidBody.velocity.y, 0f);
         }
-        myRigidBody.velocity = new Vector3(Input.GetAxis("Horizontal") * movementSpeed, myRigidBody.velocity.y, 0f);
+        
         
         
     }

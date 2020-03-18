@@ -11,8 +11,9 @@ public class PlayerControls : MonoBehaviour
     [SerializeField] List<Collider> collisionList;
     [SerializeField] SpiritType devouredSpiritType = SpiritType.Empty;
     [SerializeField] Element originalSpiritCache;
-    [SerializeField] float delayBeforeSpiritRelease;
+    [SerializeField] float delayBeforeSpiritRelease = 5f;
     private SphereCollider mySphereCollider;
+    private float timeWhenSpiritGotCaptured=0f;
 
     
 
@@ -29,7 +30,10 @@ public class PlayerControls : MonoBehaviour
         {
             DevourSpirit();
         } 
-        
+        if (Time.timeSinceLevelLoad - timeWhenSpiritGotCaptured > delayBeforeSpiritRelease)
+        {
+            ReleaseSpirit();
+        }
     }
 
     private void FindNearbySpirit()
@@ -79,6 +83,7 @@ public class PlayerControls : MonoBehaviour
                     {
                         transform.localScale = elementsList.elementsList[j].ObjectSize;
                         devouredSpiritType = elementsList.elementsList[j].spiritType;
+                        timeWhenSpiritGotCaptured = Time.timeSinceLevelLoad;
 
                     }
                 }
@@ -90,8 +95,10 @@ public class PlayerControls : MonoBehaviour
     }
     private void ReleaseSpirit()
     {
-        Debug.Log("Releasing spirit " + devouredSpiritType);
+       
         transform.localScale = originalSpiritCache.ObjectSize;
+        
+        
     }
        
     private void OnTriggerEnter(Collider other)

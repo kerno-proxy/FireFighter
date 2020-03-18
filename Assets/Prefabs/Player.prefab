@@ -146,6 +146,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   elementsList: {fileID: 11400000, guid: d5857acb62538a64699675de1cdddcd5, type: 2}
   collisionList: []
+  devouredSpiritType: 4
+  originalSpiritCache:
+    elementName: Element Name
+    objectSize: {x: 0, y: 0, z: 0}
+    objectColor: {r: 0, g: 0, b: 0, a: 0}
+    spiritType: 0
+  delayBeforeSpiritRelease: 5
 --- !u!135 &5948314295471862826
 SphereCollider:
   m_ObjectHideFlags: 0
