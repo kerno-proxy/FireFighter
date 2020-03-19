@@ -4,19 +4,33 @@ using UnityEngine;
 
 public class EnemyMovement : MonoBehaviour
 {
+    [SerializeField] GameObject spawningPoint;
+    [SerializeField] float spawningPointDistanceLimit = 2f;
     private bool isChasingPlayer = false;
     private bool isReturningToPost = false;
     private Rigidbody rigidbodyCache;
+    
 
     private void Start()
     {
         rigidbodyCache = GetComponent<Rigidbody>();
+        
+    }
+    private void Update()
+    {
+        Debug.Log(Vector3.Distance(spawningPoint.transform.position, transform.position));
+        if (isReturningToPost && Vector3.Distance(spawningPoint.transform.position, transform.position)<spawningPointDistanceLimit)
+        {
+            isReturningToPost = false;
+            rigidbodyCache.velocity = Vector3.zero;
+           
+        }
     }
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Player")
         {
-            Debug.Log("Detected a player");
+            
             isChasingPlayer = true;
         }
     }
@@ -24,7 +38,10 @@ public class EnemyMovement : MonoBehaviour
     {
         if (other.tag == "Player")
         {
+            
             isChasingPlayer = false;
+            isReturningToPost = true;
+            rigidbodyCache.velocity = new Vector3(spawningPoint.transform.position.x - transform.position.x, transform.position.y, transform.position.z);
         }
     }
     private void OnTriggerStay(Collider other)
@@ -32,7 +49,8 @@ public class EnemyMovement : MonoBehaviour
         if (other.tag == "Player")
         {
             
-            rigidbodyCache.velocity = other.transform.position - transform.position;
+            rigidbodyCache.velocity = new Vector3 (other.transform.position.x - transform.position.x, rigidbodyCache.velocity.y, rigidbodyCache.velocity.z);
+            
         }
     }
 }
