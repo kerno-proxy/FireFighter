@@ -9,6 +9,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float jumpForce = 1f;
     [SerializeField] float dodgeForce = 1f;
     [SerializeField] float dodgeCoolDown = 1f;
+    private float timeSinceLastDodge = 0f;
     private Rigidbody myRigidBody;
     private bool isInTheAir = false;
     
@@ -26,8 +27,10 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
         //bool check above ensures that no movements below can be performed while player is in the air.
-        
+        if (Input.GetButton("Horizontal"))
+        {
             Movement();
+        }
         
         if (Input.GetButtonDown("Jump"))
         {
@@ -43,7 +46,14 @@ public class PlayerMovement : MonoBehaviour
     {
         if (Input.GetButton("Horizontal"))
         {
-            transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x) * Mathf.Sign(Input.GetAxis("Horizontal")), transform.localScale.y, transform.localScale.z);
+            //transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x) * Mathf.Sign(Input.GetAxis("Horizontal")), transform.localScale.y, transform.localScale.z);
+            if (Input.GetAxis("Horizontal") < 0)
+            {
+                transform.eulerAngles = new Vector3(0, 180, 0);
+            } else if (Input.GetAxis("Horizontal") > 0)
+            {
+                transform.eulerAngles = new Vector3(0, 0, 0);
+            }
             myRigidBody.velocity = new Vector3(Input.GetAxis("Horizontal") * movementSpeed, myRigidBody.velocity.y, 0f);
         }
         
@@ -58,8 +68,10 @@ public class PlayerMovement : MonoBehaviour
     }
     private void Dodge()
     {
-        Debug.Log("Attempting a dodge"); 
-        
-        myRigidBody.AddForce(Mathf.Abs(dodgeForce)*Mathf.Sign(transform.localScale.x),dodgeForce*0.1f,0,ForceMode.Impulse);
+        if (Time.timeSinceLevelLoad - timeSinceLastDodge > dodgeCoolDown)
+        {
+            timeSinceLastDodge = Time.timeSinceLevelLoad;
+            myRigidBody.AddForce(Mathf.Abs(dodgeForce) * Mathf.Sign(transform.localScale.x), dodgeForce * 0.1f, 0, ForceMode.Impulse);
+        }
     }
 }

@@ -18,7 +18,7 @@ public class EnemyMovement : MonoBehaviour
     }
     private void Update()
     {
-        Debug.Log(Vector3.Distance(spawningPoint.transform.position, transform.position));
+        
         if (isReturningToPost && Vector3.Distance(spawningPoint.transform.position, transform.position)<spawningPointDistanceLimit)
         {
             isReturningToPost = false;
@@ -46,7 +46,7 @@ public class EnemyMovement : MonoBehaviour
     }
     private void OnTriggerStay(Collider other)
     {
-        if (other.tag == "Player")
+        if (other.tag == "Player" && isChasingPlayer)
         {
             
             rigidbodyCache.velocity = new Vector3 (other.transform.position.x - transform.position.x, rigidbodyCache.velocity.y, rigidbodyCache.velocity.z);
