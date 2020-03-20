@@ -46,7 +46,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (Input.GetButton("Horizontal"))
         {
-            //transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x) * Mathf.Sign(Input.GetAxis("Horizontal")), transform.localScale.y, transform.localScale.z);
+            
             if (Input.GetAxis("Horizontal") < 0)
             {
                 transform.eulerAngles = new Vector3(0, 180, 0);
