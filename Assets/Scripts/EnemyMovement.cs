@@ -31,14 +31,6 @@ public class EnemyMovement : MonoBehaviour
            
         }
     }
-    /* private void OnTriggerEnter(Collider other)
-     {
-         if (other.tag == "Player")
-         {
-
-             isChasingPlayer = true;
-         }
-     }*/
     private void OnTriggerEnter(Collider other)
     {
         //We detected a player nearby and initializing chasing
@@ -55,51 +47,22 @@ public class EnemyMovement : MonoBehaviour
             StopMoving();
             Attack();
            
-        } 
+        } else if (other.tag == "Player" && CalcDistanceBetweenPlayerAndEnemy(other, rangeVariator)>=attackRange)
+        {
+            StopAttacking();
+            InitializeChasing(other);
+        }
 
     }
     private void OnTriggerExit(Collider other)
     {
-        StartCoroutine(KeepFollowingThePlayer(other,returnToThePostDelay));  
+        if (other.tag == "Player")
+        {
+            
+            StartCoroutine(KeepFollowingThePlayer(other, returnToThePostDelay));
+        }
     }
-    /*private void OnTriggerExit(Collider other)
-    {
-        StartCoroutine(ChasingPlayer(other));
-    }*/
-    /*private void OnTriggerStay(Collider other)
-    {
-        if (other.tag== ("Player") && Vector3.Distance(other.gameObject.transform.position, transform.position) - Random.Range(-rangeVariator, rangeVariator) < attackRange)
-        {
-            isChasingPlayer = false;
-            isAttackingPlayer = true;
-            rigidbodyCache.velocity = Vector3.zero;
-        }
-        else if (other.tag == "Player" && isChasingPlayer)
-        {
-            
-           
-            rigidbodyCache.velocity = new Vector3 (other.transform.position.x - transform.position.x, rigidbodyCache.velocity.y, rigidbodyCache.velocity.z);
-            
-        }
-        
-    }*/
-    /*private IEnumerator ChasingPlayer(Collider other)
-    {
-        Debug.Log("Starting Coroutine " + other.name);
-        yield return new WaitForSeconds(returnToThePostDelay);
-        if (other.tag == "Player" && Vector3.Distance(other.transform.position,transform.position)-Random.Range(-detectionVariator,detectionVariator) > detectionRange)
-        {
-
-            isChasingPlayer = false;
-            isReturningToPost = true;
-            rigidbodyCache.velocity = new Vector3(spawningPoint.transform.position.x - transform.position.x, transform.position.y, transform.position.z);
-        } else if (other.tag == "Player" && Vector3.Distance(other.transform.position, transform.position) - Random.Range(-detectionVariator, detectionVariator) <= detectionRange)
-        {
-            isChasingPlayer = true;
-            isReturningToPost = false;
-            rigidbodyCache.velocity = new Vector3(other.transform.position.x - transform.position.x, rigidbodyCache.velocity.y, rigidbodyCache.velocity.z);
-        }
-    }*/
+   
     private void DetectPlayer()
     {
 
@@ -120,8 +83,15 @@ public class EnemyMovement : MonoBehaviour
         isAttackingPlayer = true;
         //isChasingPlayer = false; prabably not needed.
     }
+    private void StopAttacking()
+    {
+        Debug.Log("Stopping attacking the player!");
+        isAttackingPlayer = false;
+    }
     private void ReturnToThePost()
     {
+        Debug.Log("Returning to the post");
+        isReturningToPost = true;
         MoveTowardsTarget(spawningPoint);
     }
     private float CalcDistanceBetweenPlayerAndEnemy(Collider other, float variator)
@@ -139,12 +109,16 @@ public class EnemyMovement : MonoBehaviour
     private IEnumerator KeepFollowingThePlayer(Collider target, float forHowLongToFollow)
     {
         Debug.Log("Target out of range, following");
-        while (CalcDistanceBetweenPlayerAndEnemy(target,detectionVariator)<detectionRange && !isAttackingPlayer) //problems: if we managed to catch player and are in attack range, this coroutine is going to make us return to the post.
+        while (CalcDistanceBetweenPlayerAndEnemy(target,detectionVariator)<detectionRange && !isAttackingPlayer) 
         {
             MoveTowardsTarget(target.gameObject);
             yield return new WaitForSeconds(forHowLongToFollow);
         }
-        yield return new WaitForSeconds(forHowLongToFollow);
-        ReturnToThePost();
+        if (!isAttackingPlayer)
+        {
+            StopMoving();
+            yield return new WaitForSeconds(forHowLongToFollow);
+            ReturnToThePost();
+        }
     }
 }

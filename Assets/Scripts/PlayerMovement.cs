@@ -49,7 +49,7 @@ public class PlayerMovement : MonoBehaviour
             
             if (Input.GetAxis("Horizontal") < 0)
             {
-                transform.eulerAngles = new Vector3(0, 180, 0);
+                transform.eulerAngles = new Vector3(0, -180, 0);
             } else if (Input.GetAxis("Horizontal") > 0)
             {
                 transform.eulerAngles = new Vector3(0, 0, 0);
@@ -71,7 +71,7 @@ public class PlayerMovement : MonoBehaviour
         if (Time.timeSinceLevelLoad - timeSinceLastDodge > dodgeCoolDown)
         {
             timeSinceLastDodge = Time.timeSinceLevelLoad;
-            myRigidBody.AddForce(Mathf.Abs(dodgeForce) * Mathf.Sign(transform.localScale.x), dodgeForce * 0.1f, 0, ForceMode.Impulse);
+            myRigidBody.AddForce(Mathf.Abs(dodgeForce) * Mathf.Sign(transform.rotation.y), dodgeForce * 0.1f, 0, ForceMode.Impulse);
         }
     }
 }
