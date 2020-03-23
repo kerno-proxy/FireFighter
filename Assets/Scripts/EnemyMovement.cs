@@ -7,11 +7,15 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] GameObject spawningPoint;
     [SerializeField] float spawningPointDistanceLimit = 2f;
     [SerializeField] float attackRange = 1.5f;
+    [SerializeField] float attackCoolDown = 3f;
+    [SerializeField] float strikeForce = 3f;
+
     private bool isChasingPlayer = false;
     private bool isReturningToPost = false;
     private Rigidbody rigidbodyCache;
     private float rangeVariator = .5f, detectionVariator = .5f;
     private bool isAttackingPlayer = false;
+    private float attackTimer;
     private float returnToThePostDelay = 3f;
     private float detectionRange = 10f;
     
@@ -44,8 +48,12 @@ public class EnemyMovement : MonoBehaviour
         //We got close enough to initialize attack. At that point we should stop chasing player
         if (other.tag == "Player" && CalcDistanceBetweenPlayerAndEnemy(other,rangeVariator)< attackRange)
         {
+            
             StopMoving();
-            Attack();
+            if (Time.timeSinceLevelLoad - attackTimer > attackCoolDown)
+            {
+                Attack(other);
+            }
            
         } else if (other.tag == "Player" && CalcDistanceBetweenPlayerAndEnemy(other, rangeVariator)>=attackRange)
         {
@@ -62,12 +70,7 @@ public class EnemyMovement : MonoBehaviour
             StartCoroutine(KeepFollowingThePlayer(other, returnToThePostDelay));
         }
     }
-   
-    private void DetectPlayer()
-    {
-
-    }
-    private void InitializeChasing(Collider other)
+     private void InitializeChasing(Collider other)
     {
         //Checking that we are in detection range but not to close to be able to attack
         if (CalcDistanceBetweenPlayerAndEnemy(other,detectionVariator) < detectionRange && !isAttackingPlayer)
@@ -77,10 +80,14 @@ public class EnemyMovement : MonoBehaviour
 
         }
     }
-    private void Attack()
+    private void Attack(Collider other)
     {
-        Debug.Log("Kicking player's ass");
-        isAttackingPlayer = true;
+            Debug.Log("Kicking player's ass");
+
+        other.gameObject.GetComponent<Rigidbody>().AddForce((other.gameObject.transform.position.x - transform.position.x) * strikeForce,1f,0f, ForceMode.Impulse );
+            isAttackingPlayer = true;
+            attackTimer = Time.timeSinceLevelLoad;
+       
         //isChasingPlayer = false; prabably not needed.
     }
     private void StopAttacking()
