@@ -586,6 +586,8 @@ MonoBehaviour:
   spawningPoint: {fileID: 1776898935}
   spawningPointDistanceLimit: 2
   attackRange: 1.5
+  attackCoolDown: 3
+  strikeForce: 3
 --- !u!65 &641306242
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -865,6 +867,8 @@ MonoBehaviour:
   spawningPoint: {fileID: 599988082}
   spawningPointDistanceLimit: 2
   attackRange: 1.5
+  attackCoolDown: 3
+  strikeForce: 3
 --- !u!65 &759151727
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1081,7 +1085,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 761052147}
-  m_LocalRotation: {x: 0, y: 1e-45, z: 0.000004478537, w: 1}
+  m_LocalRotation: {x: 0, y: 1e-45, z: 0.000008790641, w: 1}
   m_LocalPosition: {x: 0, y: 1.16, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -1894,7 +1898,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1730858802}
-  m_LocalRotation: {x: -0, y: 3e-45, z: 0.000000025217105, w: 1}
+  m_LocalRotation: {x: -0, y: 3e-45, z: 0.00000002521665, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
