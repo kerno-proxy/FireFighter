@@ -24,6 +24,7 @@ public class EnemyMovement : MonoBehaviour
     {
         rigidbodyCache = GetComponent<Rigidbody>();
         
+        
     }
     private void Update()
     {
@@ -31,7 +32,7 @@ public class EnemyMovement : MonoBehaviour
         if (isReturningToPost && Vector3.Distance(spawningPoint.transform.position, transform.position)<spawningPointDistanceLimit)
         {
             isReturningToPost = false;
-            rigidbodyCache.velocity = Vector3.zero;
+            StopMoving();
            
         }
     }
@@ -105,13 +106,23 @@ public class EnemyMovement : MonoBehaviour
     {
         return Vector3.Distance(other.transform.position, transform.position) - Random.Range(-variator, variator);
     }
-    private void MoveTowardsTarget(GameObject target)
+    public void MoveTowardsTarget(GameObject target)
     {
-        rigidbodyCache.velocity = new Vector3(target.transform.position.x - transform.position.x, transform.position.y, transform.position.z);
+        if (!rigidbodyCache)
+        {
+            rigidbodyCache = GetComponent<Rigidbody>();
+        }
+            Debug.Log("Attempting to move " + name + " towards " + target.name + "using rigidbody: " + rigidbodyCache.gameObject.name);
+            rigidbodyCache.velocity = new Vector3(target.transform.position.x - transform.position.x, target.transform.position.y - transform.position.y, transform.position.z);
+        
     }
     private void StopMoving()
     {
         rigidbodyCache.velocity = Vector3.zero;
+    }
+    public bool CheckIfReachedDestination(GameObject target)
+    {
+        return (Vector3.Distance(target.transform.position, transform.position) < spawningPointDistanceLimit);
     }
     private IEnumerator KeepFollowingThePlayer(Collider target, float forHowLongToFollow)
     {
